@@ -122,6 +122,45 @@
     </insert>
 
 
+
+    <insert id="insertRequestAccount" parameterType="map">
+        INSERT INTO ACCOUNT (email, password, name, tel, role, reg_usr_id, updt_usr_id)
+        VALUES (
+        #{email},
+        #{password},
+        #{name},
+        #{tel},
+        #{role},
+        #{regUsrId},
+        #{updtUsrId}
+        )
+        <choose>
+            <when test="role == 'ROLE_PARTNER'">
+                INSERT INTO PARTNER (usr_id, com_cd, dlr_cd, brch_cd, reg_usr_id, updt_usr_id)
+                VALUES (
+                #{userId},
+                #{comCd},
+                #{dlrCd},
+                #{brchCd},
+                #{regUsrId},
+                #{updtUsrId}
+                )
+            </when>
+            <when test="role == 'ROLE_MANAGER'">
+                INSERT INTO MANAGER (usr_id, team, reg_usr_id, updt_usr_id)
+                VALUES (
+                #{userId},
+                #{team},
+                #{regUsrId},
+                #{updtUsrId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+
+
+
     <select id="getEmailCount" resultType="int" parameterType="string">
         SELECT COUNT(*) FROM ACCOUNT WHERE email = #{email}
         ;
