@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.semi.wdms.post.claim.service.dao.PartnerClaimDAO">
+    <insert id="insertAttachment" parameterType="map" useGeneratedKeys="true" keyProperty="attachment.attId">
+        INSERT INTO Attachment (att_category, reg_usr_id, updt_usr_id)
+        VALUES (
+               #{attachment.attCategory},
+               #{usrId},
+               #{usrId}
+               );
+    </insert>
+    
+    <insert id="createClaim" parameterType="map" useGeneratedKeys="true" keyProperty="claim.usrId">
+        INSERT INTO CLAIM (clmId, clmTitle, clmContent, attId, manId, pri, comCd, part, clmStatus, regUsrId, updtUsrId)
+        VALUES (
+                #{claim.clmId},
+                #{claim.clmTitle},
+                #{claim.clmContent},
+                #{claim.attId},
+                #{claim.manId},
+                #{claim.pri},
+                #{claim.comCd},
+                #{claim.part},
+                #{claim.clmStatus},
+                #{claim.regUsrId},
+                #{claim.updtUsrId}
+                );
+    </insert>
+
+
+</mapper>

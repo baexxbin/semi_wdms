@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.semi.wdms.user.admin.service.dao.AdminUserDAO">
+    <select id="getCompanyList" resultType="Company">
+        SELECT
+            com_cd,
+            com_nm
+        FROM
+            company
+        WHERE 1=1;
+    </select>
+
+    <select id="getDealerList" parameterType="String" resultType="Dealer">
+        SELECT
+            dlr_cd,
+            dlr_nm
+        FROM
+            dealer
+        WHERE 1=1
+          AND com_cd = #{comCd}
+        ;
+    </select>
+
+    <select id="getBranchList" parameterType="String" resultType="Branch">
+        SELECT
+            brch_cd,
+            brch_nm
+        FROM
+            branch
+        WHERE 1=1
+          AND com_cd = #{comCd}
+          AND dlr_cd = #{dlrCd}
+        ;
+    </select>
+
+<!--    <insert id="createPartnerAccount" parameterType="map" useGeneratedKeys="true" keyProperty="partner.usrId">-->
+<!--        INSERT INTO ACCOUNT (email, password, name, tel, role, reg_usr_id, updt_usr_id)-->
+<!--        VALUES (-->
+<!--                   #{partner.email},-->
+<!--                   #{partner.password},-->
+<!--                   #{partner.name},-->
+<!--                   #{partner.tel},-->
+<!--                   #{partner.role},-->
+<!--                   #{usrId},-->
+<!--                   #{usrId}-->
+<!--               );-->
+<!--    </insert>-->
+
+<!--    <insert id="createPartnerInfo" parameterType="map">-->
+<!--        INSERT INTO PARTNER (usr_id, com_cd, dlr_cd, brch_cd, reg_usr_id, updt_usr_id)-->
+<!--        VALUES (-->
+<!--                   #{partner.usrId},-->
+<!--                   #{partner.comCd},-->
+<!--                   #{partner.dlrCd},-->
+<!--                   #{partner.brchCd},-->
+<!--                   #{usrId},-->
+<!--                   #{usrId}-->
+<!--               );-->
+<!--    </insert>-->
+
+<!--    <insert id="createManagerAccount" parameterType="map" useGeneratedKeys="true" keyProperty="manager.usrId">-->
+<!--        INSERT INTO ACCOUNT (email, password, name, tel, role, reg_usr_id, updt_usr_id)-->
+<!--        VALUES (-->
+<!--                   #{manager.email},-->
+<!--                   #{manager.password},-->
+<!--                   #{manager.name},-->
+<!--                   #{manager.tel},-->
+<!--                   #{manager.role},-->
+<!--                   #{usrId},-->
+<!--                   #{usrId}-->
+<!--               );-->
+<!--    </insert>-->
+
+<!--    <insert id="createManagerInfo" parameterType="map">-->
+<!--        INSERT INTO MANAGER (usr_id, team, reg_usr_id, updt_usr_id)-->
+<!--        VALUES (-->
+<!--                   #{manager.usrId},-->
+<!--                   #{manager.team},-->
+<!--                   #{usrId},-->
+<!--                   #{usrId}-->
+<!--               );-->
+<!--    </insert>-->
+
+    <!-- 코드 중복 제거 코드 -->
+    <insert id="createAccount" parameterType="map" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO ACCOUNT (email, password, name, tel, role, reg_usr_id, updt_usr_id)
+        VALUES (
+               #{email},
+               #{password},
+               #{name},
+               #{tel},
+               #{role},
+               #{regUsrId},
+               #{updtUsrId}
+               )
+    </insert>
+
+    <insert id="createPartner" parameterType="map" useGeneratedKeys="true" keyProperty="partner.userId">
+        <if test="requestDTO.role == 'ROLE_PARTNER'">
+            INSERT INTO PARTNER (usr_id, com_cd, dlr_cd, brch_cd, reg_usr_id, updt_usr_id)
+            VALUES (
+            #{partner.userId},
+            #{partner.comCd},
+            #{partner.dlrCd},
+            #{partner.brchCd},
+            #{regUsrId},
+            #{updtUsrId}
+            )
+        </if>
+    </insert>
+
+    <insert id="createManager" parameterType="map" useGeneratedKeys="true" keyProperty="manager.userId">
+        <if test="requestDTO.role == 'ROLE_MANAGER'">
+            INSERT INTO MANAGER (usr_id, team, reg_usr_id, updt_usr_id)
+            VALUES (
+            #{manager.userId},
+            #{manager.team},
+            #{regUsrId},
+            #{updtUsrId}
+            )
+        </if>
+    </insert>
+
+
+    <select id="getEmailCount" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM ACCOUNT WHERE email = #{email}
+        ;
+    </select>
+</mapper>
